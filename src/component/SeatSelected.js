@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 class SeatSelected extends Component {
   render() {
-    let { seatMovie } = this.props;
+    let { seatPending } = this.props;
     return (
       <div className="col-span-3 h-[100vh] overflow-y-scroll scroll-m-2">
         <h1 className="py-6 text-3xl font-bold">DANH SÁCH GHẾ BẠN CHỌN</h1>
@@ -27,7 +27,7 @@ class SeatSelected extends Component {
             </tr>
           </thead>
           <tbody className="">
-            {seatMovie.map((item, index) => (
+            {seatPending.map((item, index) => (
               <tr key={index}>
                 <td className="px-4 py-2 border border-white">{item.soGhe}</td>
                 <td className="px-4 py-2 border border-white">
@@ -58,12 +58,12 @@ class SeatSelected extends Component {
               </tr>
             ))}
           </tbody>
-          {seatMovie.length > 0 && (
+          {seatPending.length > 0 && (
             <tfoot>
               <tr>
                 <td className="px-4 py-2 border border-white">Tổng tiền</td>
                 <td className="px-4 py-2 border border-white">
-                  {seatMovie
+                  {seatPending
                     .reduce((prev, curr) => prev + curr.gia, 0)
                     .toLocaleString()}
                 </td>
@@ -81,7 +81,7 @@ class SeatSelected extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    seatMovie: state.seat.seat,
+    seatPending: state.seat.seatPending,
   };
 };
 const mapDispatchToProps = (dispatch) => {

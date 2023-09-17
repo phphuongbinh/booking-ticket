@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { seatArr } from "../data/seatData";
 import Seat from "./Seat";
+import { connect } from "react-redux";
 
-export default class ListSeat extends Component {
+class ListSeat extends Component {
   render() {
+    let { seatPending } = this.props;
     return (
       <div
         style={{
@@ -24,13 +26,6 @@ export default class ListSeat extends Component {
           className=""
         ></div>
         <table cellSpacing="10px">
-          {/* <tr>
-            <td>{seatArr[0].hang}</td>
-            {seatArr[0].danhSachGhe.map(({ soGhe }, index) => (
-              <td key={index}>{soGhe}</td>
-            ))}
-          </tr> */}
-
           {seatArr &&
             seatArr.map((seatList, index) => {
               if (seatList.hang === "") {
@@ -51,7 +46,10 @@ export default class ListSeat extends Component {
                       <td>{seatList.hang}</td>
                       {seatList.danhSachGhe.map((item, index) => (
                         <td key={index}>
-                          <Seat item={item} />
+                          <Seat
+                            isChecked={seatPending.includes(item) || false}
+                            item={item}
+                          />
                         </td>
                       ))}
                     </tr>
@@ -64,3 +62,11 @@ export default class ListSeat extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    seatPending: state.seat.seatPending,
+  };
+};
+
+export default connect(mapStateToProps)(ListSeat);

@@ -2,37 +2,27 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 class Seat extends Component {
-  state = {
-    isChecked: false,
+  handleClickSeat = (item) => {
+    if (item.daDat) {
+      console.log("Đã đặt");
+    } else {
+      this.props.selectSeat(item);
+    }
   };
   render() {
-    let seatItem = this.props.item;
-    console.log(this.props.seatMovie);
+    let { item, isChecked } = this.props;
     return (
       <div
         onClick={() => {
-          if (seatItem.daDat) {
-            console.log("Đã đặt");
-          } else {
-            if (this.state.isChecked) {
-              console.log("Bạn đã chọn rồi");
-            } else {
-              this.setState({ isChecked: true });
-              this.props.selectSeat(seatItem);
-            }
-          }
+          this.handleClickSeat(item);
         }}
-        className={`w-6 h-6  border rounded-sm shadow-sm cursor-pointer  m-1 ${
-          seatItem.daDat
+        className={`w-6 h-6 border rounded-sm shadow-sm cursor-pointer m-1    ${
+          item.daDat
             ? "bg-orange-500 border-orange-400 shadow-orange-400"
-            : `${
-                this.state.isChecked
-                  ? "bg-green-500 border-green-400 shadow-green-400"
-                  : "bg-white border-orange-400 shadow-orange-400"
-              }`
-        }
-        
-        `}
+            : isChecked
+            ? "bg-green-500 shadow-green-400 border-green-400"
+            : "bg-white shadow-orange-400 border-orange-400"
+        }`}
       ></div>
     );
   }
@@ -40,7 +30,7 @@ class Seat extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    seatMovie: state.seat,
+    seatPending: state.seat.seatPending,
   };
 };
 
@@ -48,9 +38,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     selectSeat: (seat) => {
       return dispatch({ type: "SELECT_SEAT", payload: seat });
-    },
-    deselectSeat: (seat) => {
-      return dispatch({ type: "DESELECT_SEAT", payload: seat });
     },
   };
 };
