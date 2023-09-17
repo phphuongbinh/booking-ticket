@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-export default class SeatSelected extends Component {
+import { connect } from "react-redux";
+class SeatSelected extends Component {
   render() {
+    let { seatMovie } = this.props;
     return (
-      <div className="col-span-3">
+      <div className="col-span-3 h-[100vh] overflow-y-scroll scroll-m-2">
         <h1 className="py-6 text-3xl font-bold">DANH SÁCH GHẾ BẠN CHỌN</h1>
         <div className="flex gap-3">
           <span className="w-6 h-6 mb-2 bg-orange-500 border-green-500 rounded-sm shadow shadow-orange-500 "></span>
@@ -24,32 +26,70 @@ export default class SeatSelected extends Component {
               <th className="px-4 py-2 border border-white">Hủy</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td className="px-4 py-2 border border-white">A1</td>
-              <td className="px-4 py-2 border border-white">j150.000</td>
-              <td className="px-4 py-2 border border-white">X</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-2 border border-white">A1</td>
-              <td className="px-4 py-2 border border-white">j150.000</td>
-              <td className="px-4 py-2 border border-white">X</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-2 border border-white">A1</td>
-              <td className="px-4 py-2 border border-white">j150.000</td>
-              <td className="px-4 py-2 border border-white">X</td>
-            </tr>
+          <tbody className="">
+            {seatMovie.map((item, index) => (
+              <tr key={index}>
+                <td className="px-4 py-2 border border-white">{item.soGhe}</td>
+                <td className="px-4 py-2 border border-white">
+                  {item.gia.toLocaleString()}
+                </td>
+                <td className="px-4 py-2 border border-white flex justify-center ">
+                  <button
+                    onClick={() => {
+                      this.props.deselectSeat(item);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                      className="w-6 h-6 cursor-pointer transition-all hover:text-red-500 hover:scale-110"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
-          <tfoot>
-            <tr>
-              <td className="px-4 py-2 border border-white">Tổng tiền</td>
-              <td className="px-4 py-2 border border-white">450.000</td>
-              <td className="px-4 py-2 border border-white" />
-            </tr>
-          </tfoot>
+          {seatMovie.length > 0 && (
+            <tfoot>
+              <tr>
+                <td className="px-4 py-2 border border-white">Tổng tiền</td>
+                <td className="px-4 py-2 border border-white">
+                  {seatMovie
+                    .reduce((prev, curr) => prev + curr.gia, 0)
+                    .toLocaleString()}
+                </td>
+                <td className="px-4 py-2 border border-white" />
+              </tr>
+            </tfoot>
+          )}
         </table>
+        <button className="py-2 px-4 rounded-lg bg-blue-500 text-white shadow shadow-blue-500 mt-6">
+          Thanh toán
+        </button>
       </div>
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    seatMovie: state.seat.seat,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deselectSeat: (seat) => {
+      return dispatch({ type: "DESELECT_SEAT", payload: seat });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SeatSelected);

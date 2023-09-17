@@ -51,7 +51,7 @@ export default class ListSeat extends Component {
                       <td>{seatList.hang}</td>
                       {seatList.danhSachGhe.map((item, index) => (
                         <td key={index}>
-                          <Seat item={item.danhSachGhe} />
+                          <Seat item={item} />
                         </td>
                       ))}
                     </tr>
