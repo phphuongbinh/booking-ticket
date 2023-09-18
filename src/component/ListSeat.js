@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 class ListSeat extends Component {
   render() {
-    let { seatPending } = this.props;
+    let { seats } = this.props;
     return (
       <div
         style={{
@@ -47,7 +47,7 @@ class ListSeat extends Component {
                       {seatList.danhSachGhe.map((item, index) => (
                         <td key={index}>
                           <Seat
-                            isChecked={seatPending.includes(item) || false}
+                            isChecked={seats.includes(item) || false}
                             item={item}
                           />
                         </td>
@@ -65,7 +65,7 @@ class ListSeat extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    seatPending: state.seat.seatPending,
+    seats: state.seat.seats,
   };
 };
 

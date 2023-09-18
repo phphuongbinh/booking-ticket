@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { message } from "antd";
 
 class Seat extends Component {
   handleClickSeat = (item) => {
     if (item.daDat) {
       console.log("Đã đặt");
+      message.warning("Ghế đã đặt rồi");
     } else {
       this.props.selectSeat(item);
     }
@@ -30,7 +32,7 @@ class Seat extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    seatPending: state.seat.seatPending,
+    seats: state.seat.seats,
   };
 };
 

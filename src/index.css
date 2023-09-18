@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+.ant-modal-content button,
+[type="button"] {
+  background-color: #1677ff;
+}
+
+:where(.css-dev-only-do-not-override-i0102m).ant-btn-default:not(:disabled):not(
+    .ant-btn-disabled
+  ):hover {
+  color: #fff;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 4px;

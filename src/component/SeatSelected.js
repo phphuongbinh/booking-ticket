@@ -1,8 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Button, Modal } from "antd";
 class SeatSelected extends Component {
+  handlePayment = () => {
+    if (this.props.seats.length === 0) {
+      Modal.warning({
+        title: "Chưa chọn vị trí",
+        content: "Vui lòng chọn ghế ngồi",
+      });
+    } else {
+      this.props.paymentSeat(this.props.seats);
+      Modal.success({
+        title: "Thanh toán thành công",
+        content: "Vui lòng đến trước 30 phút khi phim bắt đầu",
+      });
+    }
+  };
   render() {
-    let { seatPending } = this.props;
+    let { seats } = this.props;
     return (
       <div className="col-span-3 h-[100vh] overflow-y-scroll scroll-m-2">
         <h1 className="py-6 text-3xl font-bold">DANH SÁCH GHẾ BẠN CHỌN</h1>
@@ -18,7 +33,7 @@ class SeatSelected extends Component {
           <span className="w-6 h-6 mb-2 bg-white  rounded-sm shadow shadow-orange-500 border border-orange-500 "></span>
           <span className="font-semibold">Ghế chưa đặt</span>
         </div>
-        <table className="w-full border border-white">
+        <table className="w-full border border-white ">
           <thead>
             <tr>
               <th className="px-4 py-2 border border-white">Số ghế</th>
@@ -27,8 +42,8 @@ class SeatSelected extends Component {
             </tr>
           </thead>
           <tbody className="">
-            {seatPending.map((item, index) => (
-              <tr key={index}>
+            {seats.map((item, index) => (
+              <tr key={index} className="font-bold text-yellow-400">
                 <td className="px-4 py-2 border border-white">{item.soGhe}</td>
                 <td className="px-4 py-2 border border-white">
                   {item.gia.toLocaleString()}
@@ -43,9 +58,9 @@ class SeatSelected extends Component {
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
-                      strokeWidth="2"
+                      strokeWidth="3"
                       stroke="currentColor"
-                      className="w-6 h-6 cursor-pointer transition-all hover:text-red-500 hover:scale-110"
+                      className="w-6 h-6 cursor-pointer transition-all text-red-500 hover:scale-110"
                     >
                       <path
                         strokeLinecap="round"
@@ -58,12 +73,12 @@ class SeatSelected extends Component {
               </tr>
             ))}
           </tbody>
-          {seatPending.length > 0 && (
-            <tfoot>
+          {seats.length > 0 && (
+            <tfoot className="font-bold">
               <tr>
                 <td className="px-4 py-2 border border-white">Tổng tiền</td>
-                <td className="px-4 py-2 border border-white">
-                  {seatPending
+                <td className="px-4 py-2 border border-white font-bold text-yellow-400">
+                  {seats
                     .reduce((prev, curr) => prev + curr.gia, 0)
                     .toLocaleString()}
                 </td>
@@ -72,22 +87,29 @@ class SeatSelected extends Component {
             </tfoot>
           )}
         </table>
-        <button className="py-2 px-4 rounded-lg bg-blue-500 text-white shadow shadow-blue-500 mt-6">
+        <Button
+          type="primary"
+          className="bg-blue-500 shadow shadow-blue-500 border-blue-500 mt-4 font-semibold text-md"
+          onClick={this.handlePayment}
+        >
           Thanh toán
-        </button>
+        </Button>
       </div>
     );
   }
 }
 const mapStateToProps = (state) => {
   return {
-    seatPending: state.seat.seatPending,
+    seats: state.seat.seats,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     deselectSeat: (seat) => {
       return dispatch({ type: "DESELECT_SEAT", payload: seat });
+    },
+    paymentSeat: (seats) => {
+      return dispatch({ type: "PAYMENT", payload: seats });
     },
   };
 };
